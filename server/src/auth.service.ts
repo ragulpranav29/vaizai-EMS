@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
@@ -28,7 +32,7 @@ export class AuthService {
       email,
       passwordHash,
     });
-    
+
     await createdUser.save();
     return { message: 'User registered successfully' };
   }
@@ -45,11 +49,12 @@ export class AuthService {
     }
 
     const payload = { sub: user._id, username: user.username, role: user.role };
-    
+
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, {
       secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
-      expiresIn: (this.configService.get<string>('REFRESH_TOKEN_EXPIRY') || '7d') as any,
+      expiresIn: (this.configService.get<string>('REFRESH_TOKEN_EXPIRY') ||
+        '7d') as any,
     });
 
     return {
@@ -59,8 +64,8 @@ export class AuthService {
         username: user.username,
         role: user.role,
         email: user.email,
-        avatar: user.avatar || user.username.substring(0, 2).toUpperCase()
-      }
+        avatar: user.avatar || user.username.substring(0, 2).toUpperCase(),
+      },
     };
   }
 
@@ -69,13 +74,18 @@ export class AuthService {
       const payload = this.jwtService.verify(refreshToken, {
         secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
       });
-      
-      const newPayload = { sub: payload.sub, username: payload.username, role: payload.role };
-      
+
+      const newPayload = {
+        sub: payload.sub,
+        username: payload.username,
+        role: payload.role,
+      };
+
       const newAccessToken = this.jwtService.sign(newPayload);
       const newRefreshToken = this.jwtService.sign(newPayload, {
         secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
-        expiresIn: (this.configService.get<string>('REFRESH_TOKEN_EXPIRY') || '7d') as any,
+        expiresIn: (this.configService.get<string>('REFRESH_TOKEN_EXPIRY') ||
+          '7d') as any,
       });
 
       return {

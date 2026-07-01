@@ -7,7 +7,7 @@ const toJSONConfig = {
   versionKey: false,
   transform: (doc: any, ret: any) => {
     delete ret._id;
-  }
+  },
 };
 
 // --- Projects ---
@@ -119,7 +119,8 @@ export class AutomationRule extends Document {
   @Prop({ required: true }) config: string;
   @Prop({ default: true }) active: boolean;
 }
-export const AutomationRuleSchema = SchemaFactory.createForClass(AutomationRule);
+export const AutomationRuleSchema =
+  SchemaFactory.createForClass(AutomationRule);
 
 // --- Automation Logs ---
 @Schema({ toJSON: toJSONConfig })
