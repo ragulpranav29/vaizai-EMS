@@ -49,7 +49,7 @@ export class AuthService {
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, {
       secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
-      expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRY') || '7d',
+      expiresIn: (this.configService.get<string>('REFRESH_TOKEN_EXPIRY') || '7d') as any,
     });
 
     return {
@@ -75,7 +75,7 @@ export class AuthService {
       const newAccessToken = this.jwtService.sign(newPayload);
       const newRefreshToken = this.jwtService.sign(newPayload, {
         secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
-        expiresIn: this.configService.get<string>('REFRESH_TOKEN_EXPIRY') || '7d',
+        expiresIn: (this.configService.get<string>('REFRESH_TOKEN_EXPIRY') || '7d') as any,
       });
 
       return {
