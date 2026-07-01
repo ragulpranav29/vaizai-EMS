@@ -2,6 +2,7 @@ services:
   - type: web
     name: emp-backend
     env: node
+    rootDir: server
     buildCommand: npm install && npm run build
     startCommand: npm run start:prod
     envVars:
@@ -9,6 +10,8 @@ services:
         value: production
       - key: PORT
         value: 5000
+      - key: NODE_OPTIONS
+        value: --max_old_space_size=460
       - key: MONGO_URI
         sync: false # Set this in the Render Dashboard
       - key: FRONTEND_URL
