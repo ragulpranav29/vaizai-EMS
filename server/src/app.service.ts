@@ -750,46 +750,7 @@ export class AppService implements OnModuleInit {
     });
   }
 
-  // --- Mock Authentication JWT Flow ---
-  async login(credentials: any) {
-    const { username, password } = credentials;
-    if (password === 'password' || password === 'admin') {
-      const accessToken = 'mock-access-token-' + username + '-' + Date.now();
-      const refreshToken = 'mock-refresh-token-' + username + '-' + Date.now();
-      return {
-        accessToken,
-        refreshToken,
-        user: {
-          username,
-          role:
-            username === 'Sarah Connor' ? 'Product Owner' : 'Lead Developer',
-          email: `${username.toLowerCase().replace(/ /g, '')}@enterprise.com`,
-          avatar: username
-            .split(' ')
-            .map((n: string) => n[0])
-            .join(''),
-        },
-      };
-    }
-    throw new Error('Invalid credentials');
-  }
 
-  async rotateTokens(body: { refreshToken: string }) {
-    const { refreshToken } = body;
-    if (refreshToken && refreshToken.startsWith('mock-refresh-token')) {
-      const parts = refreshToken.split('-');
-      const username =
-        parts.slice(3, parts.length - 1).join('-') || 'CurrentUser';
-      const accessToken = 'mock-access-token-' + username + '-' + Date.now();
-      const newRefreshToken =
-        'mock-refresh-token-' + username + '-' + Date.now();
-      return {
-        accessToken,
-        refreshToken: newRefreshToken,
-      };
-    }
-    throw new Error('Invalid refresh token');
-  }
 
   // --- Automation Execution Engine ---
   private async triggerAutomations(event: string, entity: any) {

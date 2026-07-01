@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ShieldAlert, Activity, ArrowRight, Lock, User as UserIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../store';
 import { loginUser } from '../store/slices/authSlice';
+import { api } from '../api/services';
 import '../index.css';
 
 interface LoginModuleProps {
@@ -26,11 +27,13 @@ export const LoginModule: React.FC<LoginModuleProps> = ({ serverOnline }) => {
     if (activeTab === 'login') {
       dispatch(loginUser({ username, password, serverOnline }));
     } else {
-      // In a full implementation, we'd dispatch a register action
-      // For now, we'll try to login after "registering" if they just want to see it work
-      // but ideally this would call api.auth.register.
-      // We will just alert for the sake of the UI if it's register
-      alert("Registration endpoint connected. Please use the backend API to seed a user, or login directly if you already seeded one.");
+      try {
+        await api.auth.register({ username, email, password });
+        alert("Registration successful! You can now log in.");
+        setActiveTab('login');
+      } catch (err: any) {
+        alert(err.response?.data?.message || "Registration failed");
+      }
     }
   };
 

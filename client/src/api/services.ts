@@ -12,10 +12,13 @@ import type {
 
 // API Services Layer
 export const api = {
-  // Auth Services
   auth: {
     login: async (credentials: any) => {
       const res = await client.post('/api/auth/login', credentials);
+      return res.data;
+    },
+    register: async (credentials: any) => {
+      const res = await client.post('/api/auth/register', credentials);
       return res.data;
     },
     refresh: async (refreshToken: string) => {

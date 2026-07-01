@@ -116,16 +116,6 @@ export class AppController {
     return this.appService.getReportsMetrics();
   }
 
-  // --- Mock Auth ---
-  @Post('auth/login')
-  async login(@Body() body: any) {
-    return this.appService.login(body);
-  }
-
-  @Post('auth/refresh')
-  async refresh(@Body() body: any) {
-    return this.appService.rotateTokens(body);
-  }
 
   // --- Members ---
   @Get('members')
