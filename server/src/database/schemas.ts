@@ -143,3 +143,15 @@ export class Message extends Document {
   @Prop({ default: Date.now }) timestamp: Date;
 }
 export const MessageSchema = SchemaFactory.createForClass(Message);
+
+// --- Users (Auth) ---
+@Schema({ toJSON: toJSONConfig })
+export class User extends Document {
+  @Prop({ required: true, unique: true }) username: string;
+  @Prop({ required: true }) email: string;
+  @Prop({ required: true }) passwordHash: string;
+  @Prop({ default: 'User' }) role: string;
+  @Prop() avatar: string;
+  @Prop({ default: Date.now }) createdAt: Date;
+}
+export const UserSchema = SchemaFactory.createForClass(User);

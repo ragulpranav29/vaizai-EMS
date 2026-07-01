@@ -36,6 +36,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { socketService } from './api/socketService';
 import { fetchTasks } from './store/slices/tasksSlice';
 import { fetchSprints } from './store/slices/sprintsSlice';
+import { LoginModule } from './modules/LoginModule';
 
 type ModuleType = 
   | 'dashboard' 
@@ -184,137 +185,7 @@ function App() {
   };
 
   if (!user) {
-    return (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        width: '100vw',
-        background: 'var(--bg-app)',
-        color: 'var(--text-primary)',
-        padding: '20px',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        {/* Animated Background Glow Orbs */}
-        <div style={{
-          position: 'absolute',
-          top: '20%',
-          left: '25%',
-          width: '300px',
-          height: '300px',
-          background: 'var(--primary-glow)',
-          borderRadius: '50%',
-          filter: 'blur(80px)',
-          zIndex: 0
-        }} />
-        <div style={{
-          position: 'absolute',
-          bottom: '20%',
-          right: '25%',
-          width: '300px',
-          height: '300px',
-          background: 'var(--info-glow)',
-          borderRadius: '50%',
-          filter: 'blur(80px)',
-          zIndex: 0
-        }} />
-
-        <div className="card" style={{
-          maxWidth: '440px',
-          width: '100%',
-          padding: '40px',
-          background: 'var(--bg-surface-0)',
-          border: '1px solid var(--border-strong)',
-          borderRadius: 'var(--radius-lg)',
-          boxShadow: 'var(--shadow-xl)',
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '28px',
-          zIndex: 1
-        }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-            <div style={{
-              background: 'linear-gradient(135deg, var(--primary) 0%, var(--info) 100%)',
-              width: '60px',
-              height: '60px',
-              borderRadius: 'var(--radius-md)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: 'var(--shadow-glow)'
-            }}>
-              <Activity size={32} color="#fff" />
-            </div>
-            <h2 style={{ fontSize: '26px', fontWeight: 800, marginTop: '8px', letterSpacing: '-0.5px' }}>Enterprise PM</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', margin: 0 }}>
-              Sign in to access your collaborative workspace
-            </p>
-          </div>
-
-          <form onSubmit={handleLoginSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px', textAlign: 'left' }}>
-            <div className="form-group">
-              <label style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>Username</label>
-              <input 
-                type="text" 
-                value={loginUsername} 
-                onChange={e => setLoginUsername(e.target.value)} 
-                required 
-                placeholder="e.g. John Doe"
-                style={{
-                  width: '100%',
-                  marginTop: '4px'
-                }}
-              />
-            </div>
-
-            <div className="form-group">
-              <label style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>Password</label>
-              <input 
-                type="password" 
-                value={loginPassword} 
-                onChange={e => setLoginPassword(e.target.value)} 
-                required 
-                placeholder="••••••••"
-                style={{
-                  width: '100%',
-                  marginTop: '4px'
-                }}
-              />
-            </div>
-
-            {authError && (
-              <div style={{ color: 'var(--danger)', fontSize: '12.5px', textAlign: 'center', display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
-                <ShieldAlert size={14} />
-                <span>{authError}</span>
-              </div>
-            )}
-
-            <button 
-              type="submit" 
-              disabled={authLoading}
-              className="btn btn-primary"
-              style={{
-                width: '100%',
-                padding: '12px',
-                fontWeight: 700,
-                fontSize: '14.5px',
-                marginTop: '8px',
-                borderRadius: 'var(--radius-sm)'
-              }}
-            >
-              {authLoading ? 'Authenticating...' : 'Sign In'}
-            </button>
-          </form>
-
-          <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
-            Sandbox mode active. Enter <code style={{ color: 'var(--primary)', fontWeight: 600 }}>password</code> to authenticate.
-          </div>
-        </div>
-      </div>
-    );
+    return <LoginModule serverOnline={serverOnline} />;
   }
 
   const renderModuleContent = () => {

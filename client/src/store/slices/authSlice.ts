@@ -40,28 +40,16 @@ export const loginUser = createAsyncThunk(
     payload: { username: string; password: string; serverOnline: boolean },
     { rejectWithValue }
   ) => {
-    const { username, password, serverOnline } = payload;
+    const { username, password } = payload;
     try {
-      if (serverOnline) {
-        const data = await api.auth.login({ username, password });
-        return data; // { accessToken, refreshToken, user }
-      } else {
-        if (password === 'password' || password === 'admin') {
-          const u = username || 'John Doe';
-          const role = u === 'Sarah Connor' ? 'Product Owner' : 'Lead Developer';
-          const email = `${u.toLowerCase().replace(/ /g, '')}@enterprise.com`;
-          const avatar = u.split(' ').map((n) => n[0]).join('');
-          return {
-            accessToken: 'mock-access-token-' + u + '-' + Date.now(),
-            refreshToken: 'mock-refresh-token-' + u + '-' + Date.now(),
-            user: { username: u, role, email, avatar },
-          };
-        } else {
-          return rejectWithValue('Invalid credentials. Use password "password" or "admin".');
-        }
-      }
+      // Connect to the real NestJS backend API
+      const response = await api.auth.login({ username, password });
+      return response; // Expects { accessToken, refreshToken, user: { username, role, email, avatar } }
     } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || 'Authentication failed');
+      if (err.response && err.response.data && err.response.data.message) {
+        return rejectWithValue(err.response.data.message);
+      }
+      return rejectWithValue('Network error or invalid credentials');
     }
   }
 );
