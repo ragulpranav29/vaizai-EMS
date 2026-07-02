@@ -13,7 +13,6 @@ import {
   LogOut,
   Sun,
   Moon,
-  ShieldAlert,
   Search,
   ChevronRight,
   Bell
@@ -69,16 +68,10 @@ function App() {
 
   // Redux Auth States
   const user = useAppSelector((state) => state.auth.user);
-  const authLoading = useAppSelector((state) => state.auth.loading);
-  const authError = useAppSelector((state) => state.auth.error);
 
   // Redux Notifications
   const unreadCount = useAppSelector((state) => state.notifications.unreadCount);
   const notificationsList = useAppSelector((state) => state.notifications.notifications);
-
-  // Login Form States
-  const [loginUsername, setLoginUsername] = useState('John Doe');
-  const [loginPassword, setLoginPassword] = useState('password');
 
   // Custom Hash Router Hook
   const [activeModule, navigate] = ((): [ModuleType, (module: ModuleType) => void] => {
@@ -170,15 +163,6 @@ function App() {
       socketService.disconnect();
     };
   }, [user, dispatch, addToast]);
-
-  const handleLoginSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch(loginUser({
-      username: loginUsername,
-      password: loginPassword,
-      serverOnline
-    }));
-  };
 
   const handleLogout = () => {
     dispatch(logoutUser());
